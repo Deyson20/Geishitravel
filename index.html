@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Reserva con Aviatur</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+    body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; background: #f4f6f9; color: #333; }
+    header { background: linear-gradient(135deg, #005f99, #0096c7); padding: 50px 20px; color: white; }
+    .header-content { max-width: 1100px; margin: auto; display: flex; align-items: center; justify-content: center; gap: 30px; flex-wrap: wrap; }
+    .logo { max-width: 140px; }
+    .header-text h1 { font-size: 36px; margin: 0 0 10px; }
+
+    .search-section { max-width: 1000px; margin: -40px auto 20px; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); position: relative; z-index: 10; }
+    .search-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; align-items: end; }
+    .input-group { display: flex; flex-direction: column; gap: 5px; }
+    .input-group label { font-size: 13px; font-weight: bold; color: #005f99; }
+    .input-field { padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; background: white; width: 100%; box-sizing: border-box; }
+
+    .btn-search { background: #ff6b6b; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+    .btn-search:hover { background: #ee5253; }
+
+    .results-container { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
+    .flight-card { background: white; border-radius: 12px; padding: 20px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+    .flight-info { display: flex; align-items: center; gap: 15px; }
+    .airline-logo { width: 45px; height: 45px; object-fit: contain; }
+    .price-tag { font-size: 24px; color: #ff6b6b; font-weight: bold; }
+    
+    footer { background: #e9ecef; text-align: center; padding: 25px; font-size: 14px; color: #555; margin-top: 50px; }
+    #loading { text-align: center; display: none; color: #005f99; padding: 20px; }
+</style>
+</head>
+<body>
+
+<header>
+    <div class="header-content">
+        <img src="img/Logo_geishi.jpg" alt="Logo Geishi" class="logo">
+        <div class="header-text">
+            <h1>Reserva tu viaje con Aviatur</h1>
+            <p>Vuelos en tiempo real con Google Flights</p>
+        </div>
+    </div>
+</header>
+
+<section class="search-section">
+<form class="search-form" id="flightSearch">
+    <div class="input-group">
+        <label>Origen</label>
+        <select id="origen" class="input-field" required>
+            <option value="" disabled selected>¿De dónde sales?</option>
+            <option value="Bogotá (BOG)">Bogotá (BOG)</option>
+            <option value="Medellín (MDE)">Medellín (MDE)</option>
+            <option value="Cali (CLO)">Cali (CLO)</option>
+            <option value="Madrid (MAD)">Madrid (MAD)</option>
+            <option value="Miami (MIA)">Miami (MIA)</option>
+        </select>
+    </div>
+
+    <div class="input-group">
+        <label>Destino</label>
+        <select id="destino" class="input-field" required>
+            <option value="" disabled selected>¿A dónde vas?</option>
+            <option value="Madrid (MAD)">Madrid (MAD)</option>
+            <option value="Miami (MIA)">Miami (MIA)</option>
+            <option value="Nueva York (JFK)">Nueva York (JFK)</option>
+            <option value="Bogotá (BOG)">Bogotá (BOG)</option>
+            <option value="Ciudad de México (MEX)">Ciudad de México (MEX)</option>
+            <option value="París (CDG)">París (CDG)</option>
+        </select>
+    </div>
+
+    <div class="input-group">
+        <label>Fecha Ida</label>
+        <input type="date" id="fechaIda" class="input-field" required>
+    </div>
+
+    <button type="submit" class="btn-search">BUSCAR VUELOS</button>
+</form>
+</section>
+
+<div id="loading"><h3>✈️ Consultando disponibilidad...</h3></div>
+<div id="resultados-api" class="results-container"></div>
+
+<footer>
+    © 2025 – Desarrollado para Aviatur. Búsquedas reales vía SerpApi.
+</footer>
+
+<script>
+document.getElementById('flightSearch').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const origenRaw = document.getElementById('origen').value;
+    const destinoRaw = document.getElementById('destino').value;
+    const fechaIda = document.getElementById('fechaIda').value;
+
+    const extraerIATA = texto => {
+        const match = texto.match(/\(([^)]+)\)/);
+        return match ? match[1] : "";
+    };
+
+    const origen = extraerIATA(origenRaw);
+    const destino = extraerIATA(destinoRaw);
+
+    // TU API KEY
+    const apiKey = "56a5066c603ad552299b18020f73e3a8c3e376dd5870b8b14460505c0d3c7828";
+    
+    // Si pruebas desde tu PC y sale "Error de conexión", usa esta URL comentada abajo (Proxy CORS)
+    // const url = `https://cors-anywhere.herokuapp.com/https://serpapi.com/search.json?engine=google_flights&departure_id=${origen}&arrival_id=${destino}&outbound_date=${fechaIda}&currency=USD&hl=es&api_key=${apiKey}`;
+    
+    const url = `https://serpapi.com/search.json?engine=google_flights&departure_id=${origen}&arrival_id=${destino}&outbound_date=${fechaIda}&currency=USD&hl=es&api_key=${apiKey}`;
+
+    const loading = document.getElementById('loading');
+    const contenedor = document.getElementById('resultados-api');
+
+    loading.style.display = 'block';
+    contenedor.innerHTML = '';
+
+    try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Error en la respuesta');
+        
+        const data = await response.json();
+        loading.style.display = 'none';
+
+        if (data.flights_results && data.flights_results.best_flights) {
+            data.flights_results.best_flights.forEach(vuelo => {
+                const tramo = vuelo.flights[0];
+                contenedor.innerHTML += `
+                    <div class="flight-card">
+                        <div class="flight-info">
+                            <img src="${tramo.airline_logo}" class="airline-logo" alt="Logo">
+                            <div>
+                                <strong>${tramo.airline}</strong><br>
+                                <small>${vuelo.total_duration} min | Directo</small>
+                            </div>
+                        </div>
+                        <div class="price-tag">$${vuelo.price} USD</div>
+                        <a href="https://www.aviatur.com/vuelos?origen=${origen}&destino=${destino}&fechaSalida=${fechaIda}" 
+                           target="_blank" style="background:#0096c7; color:white; padding:10px 15px; text-decoration:none; border-radius:5px; font-weight:bold;">RESERVAR</a>
+                    </div>
+                `;
+            });
+        } else {
+            contenedor.innerHTML = "<p style='text-align:center'>No hay vuelos para esta fecha.</p>";
+        }
+    } catch (error) {
+        loading.style.display = 'none';
+        console.error("Error completo:", error);
+        alert("Error de conexión: El navegador bloquea la petición local (CORS). Sube el archivo a un hosting o usa un servidor local.");
+    }
+});
+</script>
+
+</body>
+</html>
