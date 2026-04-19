@@ -105,6 +105,73 @@ function removeHabitacion(container, btnAdd, btnRemove) {
     refreshRoomControls(container, btnAdd, btnRemove);
 }
 
+function buildAdultEdges(container, adultCount) {
+    container.innerHTML = '';
+    for (let i = 1; i <= adultCount; i++) {
+        const label = document.createElement('label');
+        label.innerHTML = `
+            Edad adulto ${i}
+            <input type="number" min="18" max="120" name="edad-adulto-${i}" required>
+        `;
+        container.appendChild(label);
+    }
+}
+
+function buildChildEdges(container, childCount) {
+    container.innerHTML = '';
+    for (let i = 1; i <= childCount; i++) {
+        const label = document.createElement('label');
+        label.innerHTML = `
+            Edad niño ${i}
+            <select name="edad-nino-${i}" required>
+              ${Array.from({ length: 18 }, (_, age) => `<option value="${age}">${age} ${age === 1 ? 'año' : 'años'}</option>`).join('')}
+            </select>
+        `;
+        container.appendChild(label);
+    }
+}
+
+function updateCruceroPassengers() {
+    const adultSelect = document.getElementById('adultos-crucero');
+    const childSelect = document.getElementById('ninos-crucero');
+    const edadesAdultosContainer = document.getElementById('edades-adultos-crucero');
+    const edadesNinosContainer = document.getElementById('edades-ninos-crucero');
+
+    if (!adultSelect || !childSelect) return;
+
+    const adultCount = Number(adultSelect.value);
+    const childCount = Number(childSelect.value);
+    const totalPassengers = adultCount + childCount;
+
+    // Limitar niños si el total excede 9
+    if (totalPassengers > 9) {
+        const maxChildren = 9 - adultCount;
+        childSelect.value = Math.max(0, maxChildren);
+        buildChildEdges(edadesNinosContainer, Math.max(0, maxChildren));
+    } else {
+        buildChildEdges(edadesNinosContainer, childCount);
+    }
+
+    buildAdultEdges(edadesAdultosContainer, adultCount);
+}
+
+function initializeCruceroForm() {
+    const adultSelect = document.getElementById('adultos-crucero');
+    const childSelect = document.getElementById('ninos-crucero');
+    const fechaSalida = document.getElementById('fecha-salida-crucero');
+    const hoy = new Date().toISOString().split('T')[0];
+
+    if (fechaSalida) {
+        fechaSalida.setAttribute('min', hoy);
+    }
+
+    if (adultSelect && childSelect) {
+        adultSelect.addEventListener('change', updateCruceroPassengers);
+        childSelect.addEventListener('change', updateCruceroPassengers);
+        updateCruceroPassengers();
+    }
+}
+
 // Configuración inicial de fechas
 document.addEventListener('DOMContentLoaded', () => {
     const hoy = new Date().toISOString().split('T')[0];
@@ -144,11 +211,66 @@ document.addEventListener('DOMContentLoaded', () => {
         refreshRoomControls(habitacionesContainer, btnAgregarHabitacion, btnEliminarHabitacion);
     }
 
+    // Inicializar habitaciones Vuelo + Hotel
+    const habitacionesContainerVhotel = document.getElementById('habitaciones-container-vhotel');
+    const btnAgregarHabitacionVhotel = document.getElementById('btn-agregar-habitacion-vhotel');
+    const btnEliminarHabitacionVhotel = document.getElementById('btn-eliminar-habitacion-vhotel');
+
+    if (habitacionesContainerVhotel) {
+        habitacionesContainerVhotel.querySelectorAll('.room-card').forEach(initializeRoomCard);
+    }
+
+    if (habitacionesContainerVhotel && btnAgregarHabitacionVhotel && btnEliminarHabitacionVhotel) {
+        btnAgregarHabitacionVhotel.addEventListener('click', () => addHabitacion(habitacionesContainerVhotel, btnAgregarHabitacionVhotel, btnEliminarHabitacionVhotel));
+        btnEliminarHabitacionVhotel.addEventListener('click', () => removeHabitacion(habitacionesContainerVhotel, btnAgregarHabitacionVhotel, btnEliminarHabitacionVhotel));
+        refreshRoomControls(habitacionesContainerVhotel, btnAgregarHabitacionVhotel, btnEliminarHabitacionVhotel);
+    }
+
+    // Sincronizar fechas Vuelo + Hotel
+    const fechaIngresoVhotel = document.getElementById('fecha-ingreso-vhotel');
+    const fechaSalidaVhotel = document.getElementById('fecha-salida-vhotel');
+
+    if (fechaIngresoVhotel && fechaSalidaVhotel) {
+        fechaIngresoVhotel.setAttribute('min', hoy);
+        fechaSalidaVhotel.setAttribute('min', hoy);
+
+        fechaIngresoVhotel.addEventListener('change', () => {
+            fechaSalidaVhotel.setAttribute('min', fechaIngresoVhotel.value || hoy);
+        });
+    }
+
     // Inicializar formulario en modo solo ida
     toggleRegreso(false);
 
+    // Inicializar formulario de cruceros
+    initializeCruceroForm();
+
     const buscadorVuelos = document.getElementById('buscador-vuelos');
     const buscadorHoteles = document.getElementById('buscador-hoteles');
+    const buscadorVueloHotel = document.getElementById('buscador-vuelo-hotel');
+    const buscadorPaquetes = document.getElementById('buscador-paquetes');
+    const buscadorCruceros = document.getElementById('buscador-cruceros');
+    const buscadorAutos = document.getElementById('buscador-autos');
+
+    const getBuscadorElement = (hash) => {
+        const map = {
+            '#vuelos': buscadorVuelos,
+            '#hoteles': buscadorHoteles,
+            '#vuelo+Hotel': buscadorVueloHotel,
+            '#paquetes': buscadorPaquetes,
+            '#cruceros': buscadorCruceros,
+            '#autos': buscadorAutos,
+        };
+        return map[hash] || null;
+    };
+
+    const scrollToBuscador = (hash) => {
+        const target = getBuscadorElement(hash);
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    };
+
     const updateBuscadorVisibility = () => {
         const hash = window.location.hash;
 
@@ -158,6 +280,20 @@ document.addEventListener('DOMContentLoaded', () => {
         if (buscadorHoteles) {
             buscadorHoteles.style.display = hash === '#hoteles' ? 'block' : 'none';
         }
+        if (buscadorVueloHotel) {
+            buscadorVueloHotel.style.display = hash === '#vuelo+Hotel' ? 'block' : 'none';
+        }
+        if (buscadorPaquetes) {
+            buscadorPaquetes.style.display = hash === '#paquetes' ? 'block' : 'none';
+        }
+        if (buscadorCruceros) {
+            buscadorCruceros.style.display = hash === '#cruceros' ? 'block' : 'none';
+        }
+        if (buscadorAutos) {
+            buscadorAutos.style.display = hash === '#autos' ? 'block' : 'none';
+        }
+
+        scrollToBuscador(hash);
     };
 
     updateBuscadorVisibility();

@@ -165,6 +165,151 @@
         </div>
       </form>
     </div>
+
+    <div class="buscador-vuelos" id="buscador-vuelo-hotel">
+      <h2 class="search-title">Busca tu vuelo + hotel ideal</h2>
+      <form class="form-buscador" action="#" method="get">
+        <div class="form-row">
+          <label>
+            Origen
+            <input type="text" name="origen-vhotel" placeholder="Ciudad de salida" required>
+          </label>
+          <label>
+            Destino
+            <input type="text" name="destino-vhotel" placeholder="Ciudad de llegada" required>
+          </label>
+        </div>
+
+        <div class="form-row form-row-dates">
+          <label>
+            Fecha de ingreso
+            <input type="date" id="fecha-ingreso-vhotel" name="fecha-ingreso-vhotel" required>
+          </label>
+          <label>
+            Fecha de salida
+            <input type="date" id="fecha-salida-vhotel" name="fecha-salida-vhotel" required>
+          </label>
+        </div>
+
+        <div class="form-row room-actions">
+          <button type="button" id="btn-agregar-habitacion-vhotel" class="btn-buscar btn-small">Agregar habitación</button>
+          <button type="button" id="btn-eliminar-habitacion-vhotel" class="btn-buscar btn-small btn-secondary">Eliminar habitación</button>
+        </div>
+
+        <div id="habitaciones-container-vhotel">
+          <div class="room-card" data-room="1">
+            <h4>Habitación 1</h4>
+            <div class="form-row">
+              <label>
+                Adultos
+                <select class="adultos-select" name="habitacion-vhotel-1-adultos" required>
+                  <option value="1">1 adulto</option>
+                  <option value="2">2 adultos</option>
+                  <option value="3">3 adultos</option>
+                  <option value="4">4 adultos</option>
+                  <option value="5">5 adultos</option>
+                  <option value="6">6 adultos</option>
+                  <option value="7">7 adultos</option>
+                  <option value="8">8 adultos</option>
+                  <option value="9">9 adultos</option>
+                </select>
+              </label>
+              <label>
+                Niños
+                <select class="ninos-select" name="habitacion-vhotel-1-ninos" required>
+                  <option value="0">0 niños</option>
+                  <option value="1">1 niño</option>
+                  <option value="2">2 niños</option>
+                  <option value="3">3 niños</option>
+                  <option value="4">4 niños</option>
+                  <option value="5">5 niños</option>
+                  <option value="6">6 niños</option>
+                  <option value="7">7 niños</option>
+                  <option value="8">8 niños</option>
+                </select>
+              </label>
+            </div>
+            <div class="child-ages"></div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <button type="submit" class="btn-buscar">Buscar vuelo + hotel</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="buscador-vuelos" id="buscador-cruceros">
+      <h2 class="search-title">Encuentra tu crucero ideal</h2>
+      <form class="form-buscador" action="#" method="get">
+        <div class="form-row">
+          <label>
+            Seleccione una región
+            <select name="region-crucero" required>
+              <option value="">-- Seleccionar región --</option>
+              <option value="alaska">Alaska</option>
+              <option value="asia-oceano-indico">Asia y Oceano Índico</option>
+              <option value="australasia">Australasia</option>
+              <option value="bahamas">Bahamas</option>
+              <option value="bermudas">Bermudas</option>
+              <option value="canal-panama">Canal de Panamá</option>
+              <option value="caribe">Caribe</option>
+              <option value="europa">Europa</option>
+              <option value="hawaii">Hawaii</option>
+              <option value="mexico">México</option>
+              <option value="trasatlantico">Trasatlántico</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="form-row form-row-dates">
+          <label>
+            Fecha de salida
+            <input type="date" id="fecha-salida-crucero" name="fecha-salida-crucero" required>
+          </label>
+        </div>
+
+        <div class="form-row form-row-selects">
+          <label>
+            Adultos
+            <select id="adultos-crucero" name="adultos-crucero" required>
+              <option value="0">0 adultos</option>
+              <option value="1" selected>1 adulto</option>
+              <option value="2">2 adultos</option>
+              <option value="3">3 adultos</option>
+              <option value="4">4 adultos</option>
+              <option value="5">5 adultos</option>
+              <option value="6">6 adultos</option>
+              <option value="7">7 adultos</option>
+              <option value="8">8 adultos</option>
+              <option value="9">9 adultos</option>
+            </select>
+          </label>
+          <label>
+            Niños
+            <select id="ninos-crucero" name="ninos-crucero" required>
+              <option value="0" selected>0 niños</option>
+              <option value="1">1 niño</option>
+              <option value="2">2 niños</option>
+              <option value="3">3 niños</option>
+              <option value="4">4 niños</option>
+              <option value="5">5 niños</option>
+              <option value="6">6 niños</option>
+              <option value="7">7 niños</option>
+              <option value="8">8 niños</option>
+            </select>
+          </label>
+        </div>
+
+        <div id="edades-adultos-crucero" class="edades-container"></div>
+        <div id="edades-ninos-crucero" class="edades-container"></div>
+
+        <div class="form-row">
+          <button type="submit" class="btn-buscar">Buscar cruceros</button>
+        </div>
+      </form>
+    </div>
+
     <h2 class="section-title">Nuestros Servicios Exclusivos</h2>
     
     <div class="grid-servicios">
@@ -217,7 +362,7 @@
 </section>
 
 <footer class="footer">
-  <p>© 2025 Geishi Travel S.A.S. | Aliado Tecnológico Aviatur</p>
+  <p>© 2026 Geishi Travel S.A.S. | Aliado Tecnológico Aviatur</p>
 </footer>
 
 <script src="js/main.js"></script>
