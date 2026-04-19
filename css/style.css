@@ -60,6 +60,27 @@ body { background: #f8fafc; color: #333; }
 
 /* SERVICIOS Y CONTACTO */
 .servicios-detallados { padding: 80px 5%; background: white; text-align: center; }
+#buscador-vuelos { display: none; }
+.buscador-vuelos { max-width: 1200px; margin: 0 auto 40px; padding: 35px; background: #f8fafc; border-radius: 24px; border: 1px solid #e2e8f0; }
+.search-title { font-size: 2rem; margin-bottom: 20px; color: #1e293b; }
+.form-buscador { display: grid; gap: 20px; }
+.form-row { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+.form-row label { flex: 1 1 220px; display: grid; gap: 8px; text-align: left; font-weight: 500; color: #334155; }
+.form-row input[type="text"],
+.form-row input[type="date"],
+.form-row select { width: 100%; padding: 14px 18px; border: 1px solid #cbd5e1; border-radius: 16px; background: white; font-size: 0.95rem; }
+.form-row-dates input[type="date"] { min-width: 220px; }
+.form-row-selects select { min-width: 220px; }
+.room-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+.room-card { padding: 20px; border: 1px solid #cbd5e1; border-radius: 18px; background: #ffffff; margin-top: 20px; }
+.room-card h4 { margin-bottom: 14px; color: #1e293b; font-size: 1rem; }
+.child-ages { display: grid; gap: 15px; margin-top: 16px; }
+.child-ages label { display: grid; gap: 8px; }
+.btn-buscar { padding: 15px 35px; border: none; border-radius: 999px; background: #1e88e5; color: white; font-size: 1rem; font-weight: 700; cursor: pointer; transition: 0.3s; }
+.btn-buscar:hover { background: #00d1b2; transform: translateY(-1px); }
+.btn-small { padding: 11px 22px; font-size: 0.95rem; }
+.btn-secondary { background: #475569; }
+.btn-secondary:hover { background: #334155; }
 .section-title { font-size: 2.2rem; margin-bottom: 50px; color: #1e293b; }
 
 .grid-servicios {

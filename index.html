@@ -39,6 +39,132 @@
 
 <section class="servicios-detallados">
   <div class="container">
+    <div class="buscador-vuelos" id="buscador-vuelos">
+      <h2 class="search-title">Busca tu vuelo ideal</h2>
+      <form class="form-buscador" action="#" method="get">
+        <div class="form-row">
+          <label>
+            Origen
+            <input type="text" name="origen" placeholder="Ciudad de salida" required>
+          </label>
+          <label>
+            Destino
+            <input type="text" name="destino" placeholder="Ciudad de llegada" required>
+          </label>
+        </div>
+
+        <div class="form-row form-row-dates">
+          <label>
+            Fecha de ida
+            <input type="date" id="fecha-ida" name="fecha-ida" required>
+          </label>
+          <label id="caja-regreso">
+            Fecha de regreso
+            <input type="date" id="fecha-regreso" name="fecha-regreso" required>
+          </label>
+        </div>
+
+        <div class="form-row form-row-selects">
+          <label>
+            Equipaje
+            <select name="equipaje" required>
+              <option value="hand">Equipaje de mano</option>
+              <option value="checked">Equipaje de bodega</option>
+            </select>
+          </label>
+          <label>
+            Escalas
+            <select name="escalas" required>
+              <option value="todos">Todos los vuelos</option>
+              <option value="directo">Vuelos directos</option>
+              <option value="una">Máximo una escala</option>
+              <option value="dos">Máximo dos escalas</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="form-row form-row-radio">
+          <label>
+            <input type="radio" name="tipo-viaje" value="ida" checked onchange="toggleRegreso(false)">
+            Solo ida
+          </label>
+          <label>
+            <input type="radio" name="tipo-viaje" value="ida-regreso" onchange="toggleRegreso(true)">
+            Ida y regreso
+          </label>
+          <button type="submit" class="btn-buscar">Buscar vuelo</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="buscador-vuelos" id="buscador-hoteles">
+      <h2 class="search-title">Busca tu hotel ideal</h2>
+      <form class="form-buscador" action="#" method="get">
+        <div class="form-row">
+          <label>
+            Ubicación del hotel
+            <input type="text" name="ubicacion-hotel" placeholder="Ciudad o destino" required>
+          </label>
+        </div>
+
+        <div class="form-row form-row-dates">
+          <label>
+            Fecha de ingreso
+            <input type="date" id="fecha-ingreso" name="fecha-ingreso" required>
+          </label>
+          <label>
+            Fecha de salida
+            <input type="date" id="fecha-salida" name="fecha-salida" required>
+          </label>
+        </div>
+
+        <div class="form-row room-actions">
+          <button type="button" id="btn-agregar-habitacion" class="btn-buscar btn-small">Agregar habitación</button>
+          <button type="button" id="btn-eliminar-habitacion" class="btn-buscar btn-small btn-secondary">Eliminar habitación</button>
+        </div>
+
+        <div id="habitaciones-container">
+          <div class="room-card" data-room="1">
+            <h4>Habitación 1</h4>
+            <div class="form-row">
+              <label>
+                Adultos
+                <select class="adultos-select" name="habitacion-1-adultos" required>
+                  <option value="1">1 adulto</option>
+                  <option value="2">2 adultos</option>
+                  <option value="3">3 adultos</option>
+                  <option value="4">4 adultos</option>
+                  <option value="5">5 adultos</option>
+                  <option value="6">6 adultos</option>
+                  <option value="7">7 adultos</option>
+                  <option value="8">8 adultos</option>
+                  <option value="9">9 adultos</option>
+                </select>
+              </label>
+              <label>
+                Niños
+                <select class="ninos-select" name="habitacion-1-ninos" required>
+                  <option value="0">0 niños</option>
+                  <option value="1">1 niño</option>
+                  <option value="2">2 niños</option>
+                  <option value="3">3 niños</option>
+                  <option value="4">4 niños</option>
+                  <option value="5">5 niños</option>
+                  <option value="6">6 niños</option>
+                  <option value="7">7 niños</option>
+                  <option value="8">8 niños</option>
+                </select>
+              </label>
+            </div>
+            <div class="child-ages"></div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <button type="submit" class="btn-buscar">Buscar hotel</button>
+        </div>
+      </form>
+    </div>
     <h2 class="section-title">Nuestros Servicios Exclusivos</h2>
     
     <div class="grid-servicios">
@@ -94,5 +220,6 @@
   <p>© 2025 Geishi Travel S.A.S. | Aliado Tecnológico Aviatur</p>
 </footer>
 
+<script src="js/main.js"></script>
 </body>
 </html>
